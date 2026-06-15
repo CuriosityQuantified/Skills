@@ -15,6 +15,35 @@ metadata:
 
 Design a high-quality agent loop with the user, not for them. This skill walks through a structured interview to extract the five critical dimensions of any loop — then outputs a loop spec you can build from.
 
+## What Is a Loop?
+
+An **agent loop** is any autonomous process where an LLM-powered agent repeatedly:
+1. **Observes** current state (context, data, tool output, environment)
+2. **Decides** what action to take next
+3. **Acts** (calls a tool, writes a file, queries an API)
+4. **Evaluates** whether the termination condition has been met
+5. **Either exits** (condition satisfied) or **repeats** from step 1 with the new state
+
+### What distinguishes a loop from a one-shot prompt
+
+| One-shot | Loop |
+|----------|------|
+| Single generation, single output | Multiple iterations with state feedback |
+| No memory of previous turns (beyond context window) | Each iteration sees the results of prior iterations |
+| Agent produces an answer and stops | Agent continues until a deterministic condition is met |
+| No adaptation mid-stream | Adapts based on intermediate results / tool feedback |
+| Fixed cost per call | Variable cost — bounded by max iterations or budget |
+
+### Essential properties of a well-formed loop
+
+A loop is only as good as its **exit condition** and its **guardrails**. Without both, the agent becomes an open-ended drifter — consuming tokens until a human forcibly stops it. The five dimensions this skill interviews for (goal, restrictions, deterministic exit, guardrails, architecture) exist precisely to turn an open-ended process into a **closed, bounded, verifiable loop**.
+
+### Loop vs. cron
+
+A **cron job** fires on a schedule and runs once per tick. A **loop** iterates within a single tick, feeding its own output back as input, until a condition is met. Many agent systems combine both — a cron triggers a loop that then iterates until done.
+
+> **Analogy:** A cron job is a morning alarm — it rings once and you're up. A loop is making coffee — you grind, brew, taste, adjust, and repeat until it's right, then you stop.
+
 ## When to Use
 
 - You're about to build an agent loop and need to avoid loopmaxxing
